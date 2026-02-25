@@ -7,43 +7,61 @@
   <meta name="description" content="A simple motivational quote generator." />
 
   <style>
+    /* =========================
+       Theme / Design Variables
+       ========================= */
     :root{
-      --bg: #0f172a;
-      --card: rgba(255,255,255,0.08);
+      --bg: #0f172a;                    /* page background base color */
+      --card: rgba(255,255,255,0.08);   /* card background (glass effect) */
       --cardBorder: rgba(255,255,255,0.18);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.72);
-      --btn: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.92);   /* primary text */
+      --muted: rgba(255,255,255,0.72);  /* secondary text */
+      --btn: rgba(255,255,255,0.14);    /* button background */
       --btnHover: rgba(255,255,255,0.22);
       --focus: rgba(125, 211, 252, 0.85);
       --shadow: 0 20px 60px rgba(0,0,0,0.45);
-      --radius: 18px;
+      --radius: 18px;                   /* rounded corners */
     }
 
+    /* Apply border-box sizing so padding doesn't break layouts */
     *{ box-sizing: border-box; }
+
+    /* Make body fill the full height so centering works consistently */
     html, body{ height: 100%; }
 
     body{
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
+
+      /* Background with subtle gradients for a modern look */
       background:
         radial-gradient(1200px 600px at 20% 15%, rgba(56,189,248,0.20), transparent 60%),
         radial-gradient(900px 500px at 80% 85%, rgba(167,139,250,0.22), transparent 55%),
         var(--bg);
+
+      /* Center the card perfectly in the middle of the page */
       display: grid;
-      place-items: center; /* centers the card in the middle of the page */
+      place-items: center;
+
+      /* Small padding so it looks good on mobile */
       padding: 24px;
     }
 
     .card{
+      /* Keep card responsive: never exceed 720px, shrink on small screens */
       width: min(720px, 100%);
+
+      /* Glassmorphism styling */
       background: var(--card);
       border: 1px solid var(--cardBorder);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+
+      /* Blur behind the card for glass effect */
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+
       padding: 28px 26px;
     }
 
@@ -56,15 +74,21 @@
 
     .quote{
       margin: 0;
-      padding: 18px 18px;
+      padding: 18px;
       border-radius: 14px;
+
+      /* Slightly darker box for quote area */
       background: rgba(0,0,0,0.18);
       border: 1px solid rgba(255,255,255,0.14);
-      text-align: center; /* centers quote text in card */
+
+      /* Center quote text */
+      text-align: center;
     }
 
     #quoteText{
       margin: 0;
+
+      /* Responsive font size: grows with screen, stays in range */
       font-size: clamp(18px, 2.2vw, 26px);
       line-height: 1.35;
     }
@@ -77,10 +101,13 @@
     }
 
     .buttons{
+      /* Put buttons in a row, centered */
       display: flex;
       gap: 12px;
       justify-content: center;
       margin-top: 18px;
+
+      /* Wrap buttons on small screens */
       flex-wrap: wrap;
     }
 
@@ -88,11 +115,15 @@
       border: 1px solid rgba(255,255,255,0.18);
       background: var(--btn);
       color: var(--text);
+
       padding: 10px 14px;
       border-radius: 12px;
       cursor: pointer;
+
       font-weight: 600;
       transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+
+      /* Prevent tiny buttons */
       min-width: 120px;
     }
 
@@ -102,15 +133,18 @@
     }
 
     button:active{
+      /* Small press effect */
       transform: translateY(1px);
     }
 
     button:focus-visible{
+      /* Accessibility: visible focus outline for keyboard users */
       outline: 3px solid var(--focus);
       outline-offset: 3px;
     }
 
     .status{
+      /* Keep space reserved even when empty */
       min-height: 22px;
       text-align: center;
       margin: 14px 0 0;
@@ -128,25 +162,43 @@
 </head>
 
 <body>
+  <!--
+    Main card that contains the quote UI.
+    aria-live="polite" helps screen readers announce changes without being disruptive.
+  -->
   <main class="card" aria-live="polite">
     <h1>Motivation</h1>
 
+    <!-- Quote area (blockquote is semantic HTML for quotes) -->
     <blockquote class="quote">
+      <!-- The quote text will be replaced by JavaScript -->
       <p id="quoteText">Click “New Quote” to get motivated.</p>
+
+      <!-- The author is optional and will show as "— Name" -->
       <footer id="quoteAuthor" class="author"></footer>
     </blockquote>
 
+    <!-- Buttons for getting a new quote and copying the current quote -->
     <div class="buttons">
       <button id="newQuoteBtn" type="button">New Quote</button>
       <button id="copyBtn" type="button">Copy</button>
     </div>
 
+    <!-- Status messages (like "Copied!") for user feedback -->
     <p id="status" class="status" role="status" aria-live="polite"></p>
+
     <p class="hint">Tip: bookmark this page and hit “New Quote” anytime.</p>
   </main>
 
   <script>
-    // Simple quote bank (you can add more)
+    /* =========================
+       Quote Data (Your Database)
+       =========================
+       You can add as many quotes as you want here.
+       Each quote has:
+       - text: the motivational quote
+       - author: who said it (optional)
+    */
     const QUOTES = [
       { text: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" },
       { text: "Discipline beats motivation when motivation disappears.", author: "Unknown" },
@@ -160,58 +212,113 @@
       { text: "Dreams don’t work unless you do.", author: "John C. Maxwell" }
     ];
 
+    /* =========================
+       Grab HTML Elements
+       =========================
+       We "connect" JavaScript to the HTML by selecting elements by id.
+    */
     const quoteTextEl = document.getElementById("quoteText");
     const quoteAuthorEl = document.getElementById("quoteAuthor");
     const newQuoteBtn = document.getElementById("newQuoteBtn");
     const copyBtn = document.getElementById("copyBtn");
     const statusEl = document.getElementById("status");
 
+    /* =========================
+       Helper: Show a status message
+       =========================
+       Displays a message like "Copied!" then clears it after 1.8 seconds.
+    */
     function setStatus(msg) {
       statusEl.textContent = msg;
-      if (msg) setTimeout(() => (statusEl.textContent = ""), 1800);
+
+      // Only clear if there is a message
+      if (msg) {
+        setTimeout(() => {
+          statusEl.textContent = "";
+        }, 1800);
+      }
     }
 
+    /* =========================
+       Helper: Pick a random quote
+       =========================
+       Returns a random object from the QUOTES array.
+    */
     function randomQuote() {
       const idx = Math.floor(Math.random() * QUOTES.length);
       return QUOTES[idx];
     }
 
+    /* =========================
+       Render quote to the page
+       =========================
+       Updates the quote text and author in the HTML.
+    */
     function renderQuote(q) {
       quoteTextEl.textContent = q.text;
+
+      // If author exists, show it. Otherwise show nothing.
       quoteAuthorEl.textContent = q.author ? `— ${q.author}` : "";
     }
 
+    /* =========================
+       Button Action: New Quote
+       =========================
+       Picks a random quote and displays it.
+    */
     function newQuote() {
       renderQuote(randomQuote());
       setStatus("New quote loaded.");
     }
 
+    /* =========================
+       Button Action: Copy Quote
+       =========================
+       Tries to use modern clipboard API.
+       If it fails (older browsers), uses a fallback method.
+    */
     async function copyQuote() {
       const text = quoteTextEl.textContent.trim();
       const author = quoteAuthorEl.textContent.trim();
+
+      // Build the full string to copy
       const full = author ? `${text} ${author}` : text;
 
       try {
+        // Modern method
         await navigator.clipboard.writeText(full);
         setStatus("Copied to clipboard!");
       } catch {
-        // Fallback for older browsers
+        // Fallback method for older browsers
         const ta = document.createElement("textarea");
         ta.value = full;
+
+        // Put it off-screen so it doesn't jump the page
         ta.style.position = "fixed";
         ta.style.left = "-9999px";
+
         document.body.appendChild(ta);
         ta.select();
+
+        // Old copy command
         document.execCommand("copy");
+
         document.body.removeChild(ta);
         setStatus("Copied to clipboard!");
       }
     }
 
+    /* =========================
+       Hook Up Button Clicks
+       ========================= */
     newQuoteBtn.addEventListener("click", newQuote);
     copyBtn.addEventListener("click", copyQuote);
 
-    // Optional: load one quote on first open
+    /* =========================
+       On Page Load
+       =========================
+       Load a quote immediately so the page isn't empty.
+    */
     newQuote();
   </script>
 </body>
