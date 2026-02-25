@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Motivation Quotes</title>
+  <meta name="description" content="A simple motivational quote generator." />
+
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: rgba(255,255,255,0.08);
+      --cardBorder: rgba(255,255,255,0.18);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --btn: rgba(255,255,255,0.14);
+      --btnHover: rgba(255,255,255,0.22);
+      --focus: rgba(125, 211, 252, 0.85);
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 18px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 15%, rgba(56,189,248,0.20), transparent 60%),
+        radial-gradient(900px 500px at 80% 85%, rgba(167,139,250,0.22), transparent 55%),
+        var(--bg);
+      display: grid;
+      place-items: center; /* centers the card in the middle of the page */
+      padding: 24px;
+    }
+
+    .card{
+      width: min(720px, 100%);
+      background: var(--card);
+      border: 1px solid var(--cardBorder);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 28px 26px;
+    }
+
+    h1{
+      margin: 0 0 14px;
+      font-size: 22px;
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+
+    .quote{
+      margin: 0;
+      padding: 18px 18px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.14);
+      text-align: center; /* centers quote text in card */
+    }
+
+    #quoteText{
+      margin: 0;
+      font-size: clamp(18px, 2.2vw, 26px);
+      line-height: 1.35;
+    }
+
+    .author{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    .buttons{
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: var(--btn);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+      min-width: 120px;
+    }
+
+    button:hover{
+      background: var(--btnHover);
+      border-color: rgba(255,255,255,0.26);
+    }
+
+    button:active{
+      transform: translateY(1px);
+    }
+
+    button:focus-visible{
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .status{
+      min-height: 22px;
+      text-align: center;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hint{
+      text-align: center;
+      margin: 10px 0 0;
+      color: rgba(255,255,255,0.55);
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card" aria-live="polite">
+    <h1>Motivation</h1>
+
+    <blockquote class="quote">
+      <p id="quoteText">Click “New Quote” to get motivated.</p>
+      <footer id="quoteAuthor" class="author"></footer>
+    </blockquote>
+
+    <div class="buttons">
+      <button id="newQuoteBtn" type="button">New Quote</button>
+      <button id="copyBtn" type="button">Copy</button>
+    </div>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <p class="hint">Tip: bookmark this page and hit “New Quote” anytime.</p>
+  </main>
+
+  <script>
+    // Simple quote bank (you can add more)
+    const QUOTES = [
+      { text: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" },
+      { text: "Discipline beats motivation when motivation disappears.", author: "Unknown" },
+      { text: "Small steps every day add up to big results.", author: "Unknown" },
+      { text: "You don’t have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+      { text: "Your future is created by what you do today, not tomorrow.", author: "Robert Kiyosaki" },
+      { text: "The only way out is through.", author: "Robert Frost" },
+      { text: "Focus on progress, not perfection.", author: "Unknown" },
+      { text: "Make it happen. Shock everyone.", author: "Unknown" },
+      { text: "You are one decision away from a completely different life.", author: "Unknown" },
+      { text: "Dreams don’t work unless you do.", author: "John C. Maxwell" }
+    ];
+
+    const quoteTextEl = document.getElementById("quoteText");
+    const quoteAuthorEl = document.getElementById("quoteAuthor");
+    const newQuoteBtn = document.getElementById("newQuoteBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+      if (msg) setTimeout(() => (statusEl.textContent = ""), 1800);
+    }
+
+    function randomQuote() {
+      const idx = Math.floor(Math.random() * QUOTES.length);
+      return QUOTES[idx];
+    }
+
+    function renderQuote(q) {
+      quoteTextEl.textContent = q.text;
+      quoteAuthorEl.textContent = q.author ? `— ${q.author}` : "";
+    }
+
+    function newQuote() {
+      renderQuote(randomQuote());
+      setStatus("New quote loaded.");
+    }
+
+    async function copyQuote() {
+      const text = quoteTextEl.textContent.trim();
+      const author = quoteAuthorEl.textContent.trim();
+      const full = author ? `${text} ${author}` : text;
+
+      try {
+        await navigator.clipboard.writeText(full);
+        setStatus("Copied to clipboard!");
+      } catch {
+        // Fallback for older browsers
+        const ta = document.createElement("textarea");
+        ta.value = full;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        setStatus("Copied to clipboard!");
+      }
+    }
+
+    newQuoteBtn.addEventListener("click", newQuote);
+    copyBtn.addEventListener("click", copyQuote);
+
+    // Optional: load one quote on first open
+    newQuote();
+  </script>
+</body>
+</html>
