@@ -9,7 +9,7 @@ I can simply scroll through dozens of uplifting words and feel the energy build 
 
 The platform even offers a daily quote feature 🌅,
 allows me to tag and bookmark favorites 📚🔖,
-and lets me share my go‑to passages with friends on social media 📤🎉.
+and lets me share my go to passages with friends on social media 📤🎉.
 
 This seamless, personalized source of motivation is not only a quick fix for my own moments of doubt,
 but also a friendly hub that anyone can revisit to stay focused and inspired 🚀❤️.
