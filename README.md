@@ -14,4 +14,4 @@ and lets me share my go‑to passages with friends on social media 📤🎉.
 This seamless, personalized source of motivation is not only a quick fix for my own moments of doubt,
 but also a friendly hub that anyone can revisit to stay focused and inspired 🚀❤️.
 
-That’s the story behind why I built this site—so motivation is just a click away! 🌈👍
+That’s the story behind why I built this site for motivation is just a click away! 🌈👍
