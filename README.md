@@ -15,3 +15,6 @@ This seamless, personalized source of motivation is not only a quick fix for my 
 but also a friendly hub that anyone can revisit to stay focused and inspired 🚀❤️.
 
 That’s the story behind why I built this site for motivation is just a click away! 🌈👍
+
+To do: 
++ Add more quotes
