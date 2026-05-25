@@ -18,3 +18,4 @@ That’s the story behind why I built this site for motivation is just a click a
 
 To do: 
 + Add more quotes
++ Adjust the desginer 
