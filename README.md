@@ -1,5 +1,7 @@
 # moticationQuotes
 
+link: https://duchuycao15.github.io/moticationQuotes/
+
 Instead of spending precious minutes hunting for a single motivational quote each time🕰️🔍,
 
 I decided to create a website that brings together a vibrant collection of inspirational sayings all on one page 🖥️✨.
