@@ -20,4 +20,5 @@ That’s the story behind why I built this site for motivation is just a click a
 
 To do: 
 + Add more quotes
++ Add more quotes and fix the UI.
 + Adjust the desginer 
