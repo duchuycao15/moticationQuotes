@@ -23,4 +23,5 @@ To do:
 + Add more quotes and fix the UI.
 + Adjust the desginer
 + Chỉnh lại giao diện vẫn hiển thị ngay giữa nhưng chỉnh background lại
++ Chỉnh lại
 + 
