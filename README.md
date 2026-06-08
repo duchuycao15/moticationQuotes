@@ -24,4 +24,4 @@ To do:
 + Adjust the desginer
 + Chỉnh lại giao diện vẫn hiển thị ngay giữa nhưng chỉnh background lại
 + Chỉnh lại
-+ 
++ thêm các hiệu ứng khi bấm vào đổi quótes
