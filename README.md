@@ -26,4 +26,5 @@ To do:
 + Chỉnh lại
 + thêm các hiệu ứng khi bấm vào đổi quótes
 + Chinh lai cho hay hon
++ Them ty mau sac
 + 
