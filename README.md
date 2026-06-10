@@ -28,3 +28,5 @@ To do:
 + Chinh lai cho hay hon
 + Them ty mau sac
 + Chinh lai code cho hay hon
++ lam lai cai quote
++ 
